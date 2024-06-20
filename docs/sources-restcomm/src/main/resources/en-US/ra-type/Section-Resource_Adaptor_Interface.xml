@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../User_Guide.ent">
+%BOOK_ENTITIES;
+]>
+
+<section id="ratype_ra_interface">
+
+	<title>Resource Adaptor Interface</title>
+
+	<para>
+		The AMQP Resource Adaptor SBB Interface provides SBBs with access to the AMQP objects required for 
+		creating a new amqp Message Request/Response. It is defined as follows:
+	</para>
+	
+	<programlisting language="java">
+package org.springframework.amqp.core;
+
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.support.converter.MessageConverter;
+
+
+public interface AMQPActivity {
+
+	void send(Message message);
+	
+	void send(String routingKey, Message message);
+	
+	void send(String exchange, String routingKey, Message message);
+	
+
+
+	void convertAndSend(Object message);
+	
+	void convertAndSend(String routingKey, Object message);
+	
+	void convertAndSend(String exchange, String routingKey, Object message);
+	
+	void convertAndSend(Object message, MessagePostProcessor messagePostProcessor);
+	
+	void convertAndSend(String routingKey, Object message, MessagePostProcessor messagePostProcessor);
+	
+	void convertAndSend(String exchange, String routingKey, Object message,	MessagePostProcessor messagePostProcessor);
+	
+
+
+	Message receive();
+	
+	Message receive(String queueName);
+
+
+
+	Object receiveAndConvert();
+	
+	Object receiveAndConvert(String queueName);
+
+
+
+	&lt;R, S&gt; boolean receiveAndReply(ReceiveAndReplyCallback&lt;R, S&gt; callback);
+
+	&lt;R, S&gt; boolean receiveAndReply(String queueName, ReceiveAndReplyCallback&lt;R, S&gt; callback);
+
+	&lt;R, S&gt; boolean receiveAndReply(ReceiveAndReplyCallback&lt;R, S&gt; callback, String replyExchange, String replyRoutingKey);
+
+	&lt;R, S&gt; boolean receiveAndReply(String queueName, ReceiveAndReplyCallback&lt;R, S&gt; callback, String replyExchange, String replyRoutingKey);
+
+	&lt;R, S&gt; boolean receiveAndReply(ReceiveAndReplyCallback&lt;R, S&gt; callback, ReplyToAddressCallback&lt;S&gt; replyToAddressCallback);
+
+	&lt;R, S&gt; boolean receiveAndReply(String queueName, ReceiveAndReplyCallback&lt;R, S&gt; callback, ReplyToAddressCallback&lt;S&gt; replyToAddressCallback);
+
+
+
+	Message sendAndReceive(Message message);
+
+	Message sendAndReceive(String routingKey, Message message);
+
+	Message sendAndReceive(String exchange, String routingKey, Message message);
+
+
+
+	Object convertSendAndReceive(Object message);
+
+	Object convertSendAndReceive(String routingKey, Object message);
+
+	Object convertSendAndReceive(String exchange, String routingKey, Object message);
+
+	Object convertSendAndReceive(Object message, MessagePostProcessor messagePostProcessor);
+
+	Object convertSendAndReceive(String routingKey, Object message, MessagePostProcessor messagePostProcessor);
+
+	Object convertSendAndReceive(String exchange, String routingKey, Object message, MessagePostProcessor messagePostProcessor);
+	
+}
+	
+	</programlisting>
+	<para>send methods for messages.</para>
+	<variablelist>
+		<varlistentry>
+			<term>void send(Message message);</term>
+			<listitem>
+				<para>this method Send a message to a default exchange with a default routing key.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>void send(String routingKey, Message message);</term>
+			<listitem>
+				<para>this method Send a message to a default exchange with a specific routing key.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>void send(String exchange, String routingKey, Message message);</term>
+			<listitem>
+				<para>this method Send a message to a specific exchange with a specific routing key.</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>send methods with conversion.</para>
+	<variablelist>
+		<varlistentry>
+			<term>void convertAndSend(Object message);</term>
+			<listitem>
+				<para>this method Convert a Java object to an Amqp Message and send it to a default exchange with a default routing key.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>void convertAndSend(String routingKey, Object message);</term>
+			<listitem>
+				<para>this method Convert a Java object to an Amqp Message and send it to a default exchange with a specific routing key.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>void convertAndSend(String exchange, String routingKey, Object message);</term>
+			<listitem>
+				<para>this method Convert a Java object to an Amqp Message and send it to a specific exchange with a specific routing key.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>void convertAndSend(Object message, MessagePostProcessor messagePostProcessor);</term>
+			<listitem>
+				<para>this method Convert a Java object to an Amqp Message and send it to a default exchange with a default routing key.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>void convertAndSend(String routingKey, Object message, MessagePostProcessor messagePostProcessor);</term>
+			<listitem>
+				<para>this method Convert a Java object to an Amqp Message and send it to a default exchange with a specific routing key.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>void convertAndSend(String exchange, String routingKey, Object message, MessagePostProcessor messagePostProcessor);</term>
+			<listitem>
+				<para>this method Convert a Java object to an Amqp Message and send it to a specific exchange with a specific routing key.</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>receive methods for messages.</para>
+	<variablelist>
+		<varlistentry>
+			<term>Message receive();</term>
+			<listitem>
+				<para>Receive a message if there is one from a default queue. Returns immediately, possibly with a null value.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Message receive(String queueName);</term>
+			<listitem>
+				<para>Receive a message if there is one from a specific queue. Returns immediately, possibly with a null value.</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>receive methods with conversion.</para>
+	<variablelist>
+		<varlistentry>
+			<term>Object receiveAndConvert();</term>
+			<listitem>
+				<para>Receive a message if there is one from a default queue and convert it to a Java object. Returns immediately, possibly with a null value.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Object receiveAndConvert(String queueName);</term>
+			<listitem>
+				<para>Receive a message if there is one from a specific queue and convert it to a Java object. Returns immediately, possibly with a null value.</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>receive and send methods for provided callback.</para>
+	<variablelist>
+		<varlistentry>
+			<term>&lt;R, S&gt; boolean receiveAndReply(ReceiveAndReplyCallback&lt;R, S&gt; callback);</term>
+			<listitem>
+				<para>Receive a message if there is one from a default queue, invoke provided ReceiveAndReplyCallback 
+				and send reply message, if the callback returns one, to the  replyTo  org.springframework.amqp.core.Address
+				from org.springframework.amqp.core.MessageProperties or to default exchange and default routingKey.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>&lt;R, S&gt; boolean receiveAndReply(String queueName, ReceiveAndReplyCallback&lt;R, S&gt; callback);</term>
+			<listitem>
+				<para>Receive a message if there is one from provided queue, invoke provided ReceiveAndReplyCallback 
+				and send reply message, if the callback returns one, to the replyTo org.springframework.amqp.core.Address 
+				from org.springframework.amqp.core.MessageProperties or to default exchange and default routingKey.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>&lt;R, S&gt; boolean receiveAndReply(ReceiveAndReplyCallback&lt;R, S&gt; callback, String replyExchange, String replyRoutingKey);</term>
+			<listitem>
+				<para>Receive a message if there is one from default queue, invoke provided ReceiveAndReplyCallback
+	 			and send reply message, if the callback returns one,
+	 			to the provided exchange and routingKey.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>&lt;R, S&gt; boolean receiveAndReply(String queueName, ReceiveAndReplyCallback&lt;R, S&gt; callback, String replyExchange, String replyRoutingKey);</term>
+			<listitem>
+				<para>Receive a message if there is one from provided queue, invoke provided ReceiveAndReplyCallback
+	 			and send reply message, if the callback returns one,
+	 			to the provided exchange and routingKey.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>&lt;R, S&gt; boolean receiveAndReply(ReceiveAndReplyCallback&lt;R, S&gt; callback, ReplyToAddressCallback&lt;S&gt; replyToAddressCallback);</term>
+			<listitem>
+				<para>Receive a message if there is one from a default queue, invoke provided ReceiveAndReplyCallback
+	 			and send reply message, if the callback returns one,
+	 			to the replyTo org.springframework.amqp.core.Address
+	 			from result of ReplyToAddressCallback.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>&lt;R, S&gt; boolean receiveAndReply(String queueName, ReceiveAndReplyCallback&lt;R, S&gt; callback, ReplyToAddressCallback&lt;S&gt; replyToAddressCallback);</term>
+			<listitem>
+				<para>Receive a message if there is one from provided queue, invoke provided ReceiveAndReplyCallback
+	 			and send reply message, if the callback returns one,
+	 			to the replyTo org.springframework.amqp.core.Address
+	 			from result of ReplyToAddressCallback.</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>send and receive methods for messages.</para>
+	<variablelist>
+		<varlistentry>
+			<term>Message sendAndReceive(Message message);</term>
+			<listitem>
+				<para>Basic RPC pattern. Send a message to a default exchange with a default routing key and attempt to receive a
+	 			response. Implementations will normally set the reply-to header to an exclusive queue and wait up for some time
+	 			limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Message sendAndReceive(String routingKey, Message message);</term>
+			<listitem>
+				<para>Basic RPC pattern. Send a message to a default exchange with a specific routing key and attempt to receive a
+	 			response. Implementations will normally set the reply-to header to an exclusive queue and wait up for some time
+	 			limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Message sendAndReceive(String exchange, String routingKey, Message message);</term>
+			<listitem>
+				<para>Basic RPC pattern. Send a message to a specific exchange with a specific routing key and attempt to receive a
+	 			response. Implementations will normally set the reply-to header to an exclusive queue and wait up for some time
+	 			limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<para>send and receive methods with conversion.</para>
+	<variablelist>
+		<varlistentry>
+			<term>Object convertSendAndReceive(Object message);</term>
+			<listitem>
+				<para>Basic RPC pattern with conversion. Send a Java object converted to a message to a default exchange with a default
+	 			routing key and attempt to receive a response, converting that to a Java object. Implementations will normally
+	 			set the reply-to header to an exclusive queue and wait up for some time limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Object convertSendAndReceive(String routingKey, Object message);</term>
+			<listitem>
+				<para>Basic RPC pattern with conversion. Send a Java object converted to a message to a default exchange with a
+	 			specific routing key and attempt to receive a response, converting that to a Java object. Implementations will
+	 			normally set the reply-to header to an exclusive queue and wait up for some time limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Object convertSendAndReceive(String exchange, String routingKey, Object message);</term>
+			<listitem>
+				<para>Basic RPC pattern with conversion. Send a Java object converted to a message to a specific exchange with a
+	 			specific routing key and attempt to receive a response, converting that to a Java object. Implementations will
+	 			normally set the reply-to header to an exclusive queue and wait up for some time limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Object convertSendAndReceive(Object message, MessagePostProcessor messagePostProcessor);</term>
+			<listitem>
+				<para>Basic RPC pattern with conversion. Send a Java object converted to a message to a default exchange with a default
+	 			routing key and attempt to receive a response, converting that to a Java object. Implementations will normally
+	 			set the reply-to header to an exclusive queue and wait up for some time limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Object convertSendAndReceive(String routingKey, Object message, MessagePostProcessor messagePostProcessor);</term>
+			<listitem>
+				<para>Basic RPC pattern with conversion. Send a Java object converted to a message to a default exchange with a
+	 			specific routing key and attempt to receive a response, converting that to a Java object. Implementations will
+	 			normally set the reply-to header to an exclusive queue and wait up for some time limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>Object convertSendAndReceive(String exchange, String routingKey, Object message, MessagePostProcessor messagePostProcessor);</term>
+			<listitem>
+				<para>Basic RPC pattern with conversion. Send a Java object converted to a message to a specific exchange with a
+	 			specific routing key and attempt to receive a response, converting that to a Java object. Implementations will
+	 			normally set the reply-to header to an exclusive queue and wait up for some time limited by a timeout.</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+	<note>
+		<para>we use spring amqp stack services to support all implemented services.</para>
+	</note>
+</section>

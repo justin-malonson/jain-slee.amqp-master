@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [<!ENTITY % BOOK_ENTITIES SYSTEM "User_Guide.ent">%BOOK_ENTITIES;]>
+
+<chapter id="introduction">
+
+	<title>Introduction to &THIS.PLATFORM; JAIN SLEE &THIS.RA; Resource Adaptor</title>
+
+<para>
+Advanced Message Queuing Protocol (AMQP)  is an open standard for passing business messages between applications or organizations.  It connects systems, feeds business processes with the information they need and reliably transmits onward the instructions that achieve their goals. 
+</para>
+	<para>For further details please look at <ulink url="https://www.amqp.org/resources/specifications" /></para>
+	<para>For spec details please look at  <ulink url="http://docs.oasis-open.org/amqp/core/v1.0/amqp-core-complete-v1.0.pdf" /></para>
+	<para>This resource adaptor provides an AMQP API for JAIN SLEE applications. </para>
+	
+
+
+	
+</chapter>
